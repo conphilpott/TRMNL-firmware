@@ -20,7 +20,7 @@ void display_init(void)
     Log.info("%s [%d]: dev module end\r\n", __FILE__, __LINE__);
 
     Log.info("%s [%d]: screen hw start\r\n", __FILE__, __LINE__);
-    EPD_7IN5_V2_Init_New();
+    EPD_4IN2_Init_Fast();
     Log.info("%s [%d]: screen hw end\r\n", __FILE__, __LINE__);
 }
 
@@ -32,7 +32,7 @@ void display_init(void)
 void display_reset(void)
 {
     Log.info("%s [%d]: e-Paper Clear start\r\n", __FILE__, __LINE__);
-    EPD_7IN5_V2_Clear();
+    EPD_4IN2_Clear();
     Log.info("%s [%d]:  e-Paper Clear end\r\n", __FILE__, __LINE__);
     // DEV_Delay_ms(500);
 }
@@ -48,7 +48,7 @@ void display_show_image(uint8_t *image_buffer, bool reverse)
     //  Create a new image cache
     UBYTE *BlackImage;
     /* you have to edit the startup_stm32fxxx.s file and set a big enough heap size */
-    UWORD Imagesize = ((EPD_7IN5_V2_WIDTH % 8 == 0) ? (EPD_7IN5_V2_WIDTH / 8) : (EPD_7IN5_V2_WIDTH / 8 + 1)) * EPD_7IN5_V2_HEIGHT;
+    UWORD Imagesize = ((EPD_4IN2_WIDTH % 8 == 0) ? (EPD_4IN2_WIDTH / 8) : (EPD_4IN2_WIDTH / 8 + 1)) * EPD_4IN2_HEIGHT ;
     
     Log.error("%s [%d]: free heap - %d\r\n", __FILE__, __LINE__, ESP.getFreeHeap());
     Log.error("%s [%d]: free alloc heap - %d\r\n", __FILE__, __LINE__, ESP.getMaxAllocHeap());
@@ -59,10 +59,10 @@ void display_show_image(uint8_t *image_buffer, bool reverse)
     }
     Log.info("%s [%d]: Paint_NewImage %d\r\n", __FILE__, __LINE__, reverse);
     // if (reverse)
-    //     Paint_NewImage(BlackImage, EPD_7IN5_V2_WIDTH, EPD_7IN5_V2_HEIGHT, 0, BLACK);
+    //     Paint_NewImage(BlackImage, EPD_4IN2_WIDTH, EPD_4IN2_HEIGHT , 0, BLACK);
     // else
     
-    Paint_NewImage(BlackImage, EPD_7IN5_V2_WIDTH, EPD_7IN5_V2_HEIGHT, 0, WHITE);
+    Paint_NewImage(BlackImage, EPD_4IN2_WIDTH, EPD_4IN2_HEIGHT , 0, WHITE);
 
     Log.info("%s [%d]: show image for array\r\n", __FILE__, __LINE__);
     Paint_SelectImage(BlackImage);
@@ -76,7 +76,7 @@ void display_show_image(uint8_t *image_buffer, bool reverse)
         }
     }
     Paint_DrawBitMap(image_buffer + 62);
-    EPD_7IN5_V2_Display(BlackImage);
+    EPD_4IN2_Display(BlackImage);
     Log.info("%s [%d]: display\r\n", __FILE__, __LINE__);
 
     free(BlackImage);
@@ -93,7 +93,7 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type)
 {
     UBYTE *BlackImage;
     /* you have to edit the startup_stm32fxxx.s file and set a big enough heap size */
-    UWORD Imagesize = ((EPD_7IN5_V2_WIDTH % 8 == 0) ? (EPD_7IN5_V2_WIDTH / 8) : (EPD_7IN5_V2_WIDTH / 8 + 1)) * EPD_7IN5_V2_HEIGHT;
+    UWORD Imagesize = ((EPD_4IN2_WIDTH % 8 == 0) ? (EPD_4IN2_WIDTH / 8) : (EPD_4IN2_WIDTH / 8 + 1)) * EPD_4IN2_HEIGHT ;
     Log.error("%s [%d]: free heap - %d\r\n", __FILE__, __LINE__, ESP.getFreeHeap());
     Log.error("%s [%d]: free alloc heap - %d\r\n", __FILE__, __LINE__, ESP.getMaxAllocHeap());
     if ((BlackImage = (UBYTE *)malloc(Imagesize)) == NULL)
@@ -103,7 +103,7 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type)
     }
 
     Log.info("%s [%d]: Paint_NewImage\r\n", __FILE__, __LINE__);
-    Paint_NewImage(BlackImage, EPD_7IN5_V2_WIDTH, EPD_7IN5_V2_HEIGHT, 0, WHITE);
+    Paint_NewImage(BlackImage, EPD_4IN2_WIDTH, EPD_4IN2_HEIGHT , 0, WHITE);
 
     Log.info("%s [%d]: show image for array\r\n", __FILE__, __LINE__);
     Paint_SelectImage(BlackImage);
@@ -217,7 +217,7 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type)
         break;
     }
 
-    EPD_7IN5_V2_Display(BlackImage);
+    EPD_4IN2_Display(BlackImage);
     Log.info("%s [%d]: display\r\n", __FILE__, __LINE__);
     free(BlackImage);
     BlackImage = NULL;
@@ -239,13 +239,13 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type, String friendly_i
     if (message_type == WIFI_CONNECT)
     {
         Log.info("%s [%d]: Display set to white\r\n", __FILE__, __LINE__);
-        EPD_7IN5_V2_ClearWhite();
+        EPD_4IN2_Clear();
         delay(1000);
     }
 
     UBYTE *BlackImage;
     /* you have to edit the startup_stm32fxxx.s file and set a big enough heap size */
-    UWORD Imagesize = ((EPD_7IN5_V2_WIDTH % 8 == 0) ? (EPD_7IN5_V2_WIDTH / 8) : (EPD_7IN5_V2_WIDTH / 8 + 1)) * EPD_7IN5_V2_HEIGHT;
+    UWORD Imagesize = ((EPD_4IN2_WIDTH % 8 == 0) ? (EPD_4IN2_WIDTH / 8) : (EPD_4IN2_WIDTH / 8 + 1)) * EPD_4IN2_HEIGHT ;
     Log.error("%s [%d]: free heap - %d\r\n", __FILE__, __LINE__, ESP.getFreeHeap());
     Log.error("%s [%d]: free alloc heap - %d\r\n", __FILE__, __LINE__, ESP.getMaxAllocHeap());
     if ((BlackImage = (UBYTE *)malloc(Imagesize)) == NULL)
@@ -255,7 +255,7 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type, String friendly_i
     }
 
     Log.info("%s [%d]: Paint_NewImage\r\n", __FILE__, __LINE__);
-    Paint_NewImage(BlackImage, EPD_7IN5_V2_WIDTH, EPD_7IN5_V2_HEIGHT, 0, WHITE);
+    Paint_NewImage(BlackImage, EPD_4IN2_WIDTH, EPD_4IN2_HEIGHT , 0, WHITE);
 
     Log.info("%s [%d]: show image for array\r\n", __FILE__, __LINE__);
     Paint_SelectImage(BlackImage);
@@ -299,7 +299,7 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type, String friendly_i
         break;
     }
     Log.info("%s [%d]: Start drawing...\r\n", __FILE__, __LINE__);
-    EPD_7IN5_V2_Display(BlackImage);
+    EPD_4IN2_Display(BlackImage);
     Log.info("%s [%d]: display\r\n", __FILE__, __LINE__);
     free(BlackImage);
     BlackImage = NULL;
@@ -313,5 +313,5 @@ void display_show_msg(uint8_t *image_buffer, MSG message_type, String friendly_i
 void display_sleep(void)
 {
     Log.info("%s [%d]: Goto Sleep...\r\n", __FILE__, __LINE__);
-    EPD_7IN5B_V2_Sleep();
+    EPD_4IN2_Sleep();
 }
